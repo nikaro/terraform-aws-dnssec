@@ -1,0 +1,50 @@
+name: CD
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "*.tf"
+  workflow_dispatch:
+
+env:
+  # renovate: datasource=pypi depName=commitizen
+  COMMITIZEN_VERSION: 3.15.0
+
+jobs:
+  ci:
+    name: CI
+    uses: ./.github/workflows/ci.yml
+    secrets: inherit
+
+  release:
+    name: Release
+    needs: [ci]
+    if: "!startsWith(github.event.head_commit.message, 'bump:')"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        with:
+          fetch-depth: 0
+
+      - name: Check if version bumped
+        id: latest-tag
+        run: echo "tag=$(git describe --tags --abbrev=0)" >> "$GITHUB_OUTPUT"
+
+      - name: Dry run
+        uses: commitizen-tools/commitizen-action@bc2616fec6b3effc9ad20380f19550a8b18cdbdf # 0.20.0
+        with:
+          github_token: ${{ github.token }}
+          changelog_increment_filename: _changelog.md
+          commitizen_version: ${{ env.COMMITIZEN_VERSION }}
+          dry_run: true
+
+      - name: Bump
+        uses: commitizen-tools/commitizen-action@bc2616fec6b3effc9ad20380f19550a8b18cdbdf # 0.20.0
+        with:
+          github_token: ${{ github.token }}
+          changelog_increment_filename: _changelog.md
+          commitizen_version: ${{ env.COMMITIZEN_VERSION }}
