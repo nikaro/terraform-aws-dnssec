@@ -3,7 +3,7 @@ exclude: ^vendor/
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v4.6.0
     hooks:
       - id: check-added-large-files
       - id: check-case-conflict
@@ -23,7 +23,7 @@ repos:
       - id: trailing-whitespace
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.28.0
+    rev: 0.28.3
     hooks:
       - id: check-github-actions
       - id: check-github-workflows
@@ -44,7 +44,7 @@ repos:
       - id: yamllint
 
   - repo: https://github.com/rhysd/actionlint
-    rev: v1.6.26
+    rev: v1.7.0
     hooks:
       - id: actionlint
 
@@ -67,6 +67,6 @@ repos:
         require_serial: true
 
   - repo: https://github.com/commitizen-tools/commitizen
-    rev: v3.15.0
+    rev: v3.25.0
     hooks:
       - id: commitizen
