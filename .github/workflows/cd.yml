@@ -1,15 +1,9 @@
 name: CD
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - "*.tf"
+  schedule:
+    - cron: "0 0 * * 3"
   workflow_dispatch:
-
-env:
-  # renovate: datasource=pypi depName=commitizen
-  COMMITIZEN_VERSION: 3.26.0
 
 jobs:
   ci:
@@ -20,7 +14,6 @@ jobs:
   release:
     name: Release
     needs: [ci]
-    if: "!startsWith(github.event.head_commit.message, 'bump:')"
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -39,7 +32,6 @@ jobs:
         with:
           github_token: ${{ github.token }}
           changelog_increment_filename: _changelog.md
-          commitizen_version: ${{ env.COMMITIZEN_VERSION }}
           dry_run: true
 
       - name: Bump
@@ -47,4 +39,3 @@ jobs:
         with:
           github_token: ${{ github.token }}
           changelog_increment_filename: _changelog.md
-          commitizen_version: ${{ env.COMMITIZEN_VERSION }}
