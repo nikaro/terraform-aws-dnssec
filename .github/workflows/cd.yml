@@ -1,3 +1,4 @@
+---
 name: CD
 
 on:
@@ -14,7 +15,7 @@ jobs:
   release:
     name: Release
     needs: [ci]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     permissions:
       contents: write
     steps:
@@ -22,10 +23,6 @@ jobs:
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
           fetch-depth: 0
-
-      - name: Check if version bumped
-        id: latest-tag
-        run: echo "tag=$(git describe --tags --abbrev=0)" >> "$GITHUB_OUTPUT"
 
       - name: Dry run
         uses: commitizen-tools/commitizen-action@1f11eb222996406681d2bfa1eb3d997eca46557c # 0.21.0
@@ -35,6 +32,7 @@ jobs:
           dry_run: true
 
       - name: Bump
+        if: env.PREVIOUS_REVISION != env.REVISION
         uses: commitizen-tools/commitizen-action@1f11eb222996406681d2bfa1eb3d997eca46557c # 0.21.0
         with:
           github_token: ${{ github.token }}
