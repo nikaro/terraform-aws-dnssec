@@ -24,6 +24,6 @@ jobs:
         uses: terraform-linters/setup-tflint@19a52fbac37dacb22a09518e4ef6ee234f2d4987 # v4.0.0
 
       - name: Run pre-commit
-        uses: nikaro/actions/pre-commit@1633ec52940eb713889300c39803133c4bb96c23 # 1.6.9
+        uses: nikaro/actions/pre-commit@cecb5d4e1f07cde50d8c5738e4a1c60c4938fc9f # 1.6.10
         with:
           python-version: 3.x
